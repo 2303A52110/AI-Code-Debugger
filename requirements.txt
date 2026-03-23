@@ -3,3 +3,4 @@ groq==1.1.1
 python-dotenv==1.2.2
 pymongo==4.16.0
 gunicorn==25.1.0
+requests
