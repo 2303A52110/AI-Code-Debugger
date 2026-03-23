@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Code Debugger</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>AI Code Debugger</h1>
+
+<form action="/analyze" method="POST">
+
+<label>Language:</label>
+<select name="language">
+    <option value="Python">Python</option>
+    <option value="C">C</option>
+    <option value="Java">Java</option>
+</select>
+
+<br><br>
+
+<label>Explanation Level:</label>
+<select name="level">
+    <option value="simple">Simple</option>
+    <option value="detailed">Detailed</option>
+</select>
+
+<br><br>
+
+<textarea name="code" rows="15" placeholder="Paste your code here"></textarea>
+
+<br><br>
+
+<button type="submit" id="analyzeBtn" onclick="document.getElementById('analyzeBtn').innerText='Analyzing...';">Analyze Code</button>
+
+</form>
+
+<a href="/history">View History</a>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+
+{% if result %}
+<h2>Result:</h2>
+<div style="white-space: pre-wrap;">{{ result }}</div>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History</title>
+</head>
+<body>
+
+<h1>Submission History</h1>
+
+{% for record in records %}
+    <hr>
+    <p><b>Language:</b> {{ record.language }}</p>
+    <p><b>Time:</b> {{ record.timestamp }}</p>
+    <p><b>Code Submitted:</b></p>
+    <pre>{{ record.code }}</pre>       <!-- ADD THIS LINE -->
+    <p><b>Result:</b></p>
+    <pre>{{ record.result }}</pre>
+{% endfor %}
+
+<a href="/">Back</a>
+
+</body>
+</html>
