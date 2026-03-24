@@ -2,21 +2,11 @@ from flask import Flask, render_template, request
 import os
 from dotenv import load_dotenv
 import requests
-import datetime
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
-
-# Optional MongoDB (safe)
-collection = None
-try:
-    
-    mongo_uri = os.getenv("MONGO_URI")
-    
-except:
-    collection = None
 
 
 @app.route('/')
@@ -55,19 +45,26 @@ Code:
 {code}
 """
 
+        api_key = os.getenv("OPENROUTER_API_KEY")
+
+        if not api_key:
+            return render_template('index.html', error="API key not found. Check Render environment variables.")
+
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
             json={
-                "model": "nvidia/nemotron-3-super-120b-a12b:free",
-                "messages": [{"role": "user", "content": prompt}]
+                "model": "openai/gpt-3.5-turbo",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful code debugger."},
+                    {"role": "user", "content": prompt}
+                ]
             }
         )
 
-        # Better error handling
         if response.status_code != 200:
             return render_template('index.html', error=f"API Error: {response.text}")
 
@@ -77,9 +74,6 @@ Code:
             return render_template('index.html', error="Invalid API response")
 
         result = data["choices"][0]["message"]["content"]
-
-        # Save history if MongoDB exists
-        
 
         return render_template('index.html', result=result)
 
