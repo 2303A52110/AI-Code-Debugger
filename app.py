@@ -8,7 +8,7 @@ import datetime
 
 app = Flask(__name__)
 
-mongo_client = MongoClient(os.getenv("MONGO_URI", "mongodb://localhost:27017/"))
+mongo_client = MongoClient(os.getenv("MONGO_URI"))
 db = mongo_client["ai_code_debugger"]
 collection = db["history"]
 
@@ -62,6 +62,8 @@ Code:
         data = response.json()
         if "choices" not in data:
             raise Exception(str(data))
+        if response.status_code != 200:
+            raise Exception("API request failed")
         result = data["choices"][0]["message"]["content"]
 
         collection.insert_one({
@@ -82,4 +84,4 @@ def history():
     return render_template('history.html', records=records)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(host="0.0.0.0", port=10000)
