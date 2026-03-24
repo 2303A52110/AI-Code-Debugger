@@ -17,6 +17,10 @@
     <pre>{{ record.result }}</pre>
 {% endfor %}
 
+{% if records|length == 0 %}
+<p>No history available.</p>
+{% endif %}
+
 <a href="/">Back</a>
 
 </body>

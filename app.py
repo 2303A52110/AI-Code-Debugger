@@ -1,20 +1,28 @@
 from flask import Flask, render_template, request
 import os
 from dotenv import load_dotenv
-load_dotenv()
 import requests
-from pymongo import MongoClient
 import datetime
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-db = mongo_client["ai_code_debugger"]
-collection = db["history"]
+# Optional MongoDB (safe)
+collection = None
+try:
+    
+    mongo_uri = os.getenv("MONGO_URI")
+    
+except:
+    collection = None
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -59,29 +67,30 @@ Code:
             }
         )
 
-        data = response.json()
-        if "choices" not in data:
-            raise Exception(str(data))
+        # Better error handling
         if response.status_code != 200:
-            raise Exception("API request failed")
+            return render_template('index.html', error=f"API Error: {response.text}")
+
+        data = response.json()
+
+        if "choices" not in data:
+            return render_template('index.html', error="Invalid API response")
+
         result = data["choices"][0]["message"]["content"]
 
-        collection.insert_one({
-            "code": code,
-            "language": language,
-            "result": result,
-            "timestamp": datetime.datetime.now()
-        })
+        # Save history if MongoDB exists
+        
 
         return render_template('index.html', result=result)
 
     except Exception as e:
-        return render_template('index.html', error=f"Something went wrong: {str(e)}")
+        return render_template('index.html', error=f"Error: {str(e)}")
+
 
 @app.route('/history')
 def history():
-    records = collection.find().sort("timestamp", -1)
-    return render_template('history.html', records=records)
+    return render_template('history.html', records=[])
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
