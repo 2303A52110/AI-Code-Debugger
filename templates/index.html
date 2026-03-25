@@ -6,45 +6,50 @@
 </head>
 <body>
 
-<h1>AI Code Debugger</h1>
+<div class="container">
+    <h1>🚀 AI Code Debugger</h1>
 
-<form action="/analyze" method="POST">
+    <form action="/analyze" method="POST">
 
-<label>Language:</label>
-<select name="language">
-    <option value="Python">Python</option>
-    <option value="C">C</option>
-    <option value="Java">Java</option>
-</select>
+        <div class="row">
+            <div>
+                <label>Language</label>
+                <select name="language">
+                    <option value="Python">Python</option>
+                    <option value="C">C</option>
+                    <option value="Java">Java</option>
+                </select>
+            </div>
 
-<br><br>
+            <div>
+                <label>Explanation Level</label>
+                <select name="level">
+                    <option value="simple">Simple</option>
+                    <option value="detailed">Detailed</option>
+                </select>
+            </div>
+        </div>
 
-<label>Explanation Level:</label>
-<select name="level">
-    <option value="simple">Simple</option>
-    <option value="detailed">Detailed</option>
-</select>
+        <textarea name="code" placeholder="Paste your code here..."></textarea>
 
-<br><br>
+        <button type="submit" id="analyzeBtn"
+        onclick="this.innerText='Analyzing...';">
+        Analyze Code
+        </button>
 
-<textarea name="code" rows="15" placeholder="Paste your code here"></textarea>
+    </form>
 
-<br><br>
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
 
-<button type="submit" id="analyzeBtn" onclick="document.getElementById('analyzeBtn').innerText='Analyzing...';">Analyze Code</button>
-
-</form>
-
-<a href="/history">View History</a>
-
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
-
-{% if result %}
-<h2>Result:</h2>
-<div style="white-space: pre-wrap;">{{ result }}</div>
-{% endif %}
+    {% if result %}
+        <div class="result">
+            <h2>🤖 Analysis Result</h2>
+            <pre>{{ result }}</pre>
+        </div>
+    {% endif %}
+</div>
 
 </body>
 </html>
