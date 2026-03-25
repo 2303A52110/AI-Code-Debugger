@@ -8,13 +8,12 @@ body {
 
 .container {
     width: 90%;
-    max-width: 1000px;
+    max-width: 900px;
     margin: 40px auto;
-    background: #1e293b;
     padding: 25px;
+    background: #1e293b;
     border-radius: 10px;
 }
-
 h1 {
     text-align: center;
 }
@@ -65,16 +64,21 @@ button:hover {
     max-width: 100%;
     overflow-x: auto;   /* horizontal scroll */
 }
-.result {
-    max-height: 500px;
-    overflow-y: auto;
-}
 .result pre {
-    white-space: pre-wrap;   /* wrap text */
-    word-wrap: break-word;   /* break long words */
-    overflow-wrap: break-word;
+    white-space: pre-wrap;      /* wrap text */
+    word-break: break-word;     /* break long lines */
+    overflow-wrap: anywhere;    /* force wrap if needed */
+    line-height: 1.6;
     font-size: 14px;
-    line-height: 1.5;
+}
+
+.result {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.result-text {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .error {
